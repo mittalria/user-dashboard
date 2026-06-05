@@ -1,0 +1,22 @@
+<div class="dashboard">
+  <h2>User Dashboard</h2>
+
+  <!-- Error State -->
+  <div *ngIf="hasError" class="error">
+    Something went wrong. Please try again.
+  </div>
+
+  <!-- Data + Loading State -->
+  <ng-container *ngIf="users$ | async as users; else loading">
+    <!-- Empty State -->
+    <div *ngIf="users.length === 0" class="empty">No users found.</div>
+
+    <!-- Dumb component receives data via @Input -->
+    <app-user-table *ngIf="users.length > 0" [users]="users"> </app-user-table>
+  </ng-container>
+
+  <!-- Loading Template -->
+  <ng-template #loading>
+    <p class="loading">Loading users...</p>
+  </ng-template>
+</div>
