@@ -6,17 +6,14 @@
     Something went wrong. Please try again.
   </div>
 
-  <!-- Data + Loading State -->
-  <ng-container *ngIf="users$ | async as users; else loading">
-    <!-- Empty State -->
-    <div *ngIf="users.length === 0" class="empty">No users found.</div>
+  <!-- Empty State -->
+  <div *ngIf="!hasError && filteredUsers.length === 0">No users found.</div>
 
-    <!-- Dumb component receives data via @Input -->
-    <app-user-table *ngIf="users.length > 0" [users]="users"> </app-user-table>
-  </ng-container>
-
-  <!-- Loading Template -->
-  <ng-template #loading>
-    <p class="loading">Loading users...</p>
-  </ng-template>
+  <!-- Table — now uses filteredUsers, not the Observable directly -->
+  <app-user-table
+    *ngIf="filteredUsers.length > 0"
+    [users]="filteredUsers"
+    (searchChanged)="onSearchChanged($event)"
+  >
+  </app-user-table>
 </div>

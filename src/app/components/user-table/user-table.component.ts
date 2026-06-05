@@ -1,4 +1,10 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { User } from '../../services/user.service';
 
@@ -7,12 +13,18 @@ import { User } from '../../services/user.service';
   templateUrl: './user-table.component.html',
   standalone: true,
   imports: [CommonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush, // 👈 always OnPush on dumb components
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserTableComponent {
-  @Input() users: User[] = []; // 👈 only knows about what it receives
+  @Input() users: User[] = [];
+  @Output() searchChanged = new EventEmitter<string>(); // 👈 events go UP
 
   trackById(index: number, user: User): number {
-    return user.id; // 👈 helps Angular avoid re-rendering unchanged rows
+    return user.id;
+  }
+
+  onSearch(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchChanged.emit(value); // 👈 tell parent, don't handle yourself
   }
 }
